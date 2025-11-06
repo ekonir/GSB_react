@@ -1,0 +1,31 @@
+.nav {
+  padding: 1rem;
+  background-color: #333;
+  color: white;
+}
+
+.nav-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.nav-container span {
+  margin-right: 1rem;
+  font-size: 1.2rem;
+}
+
+.nav-link {
+  color: white;
+  text-decoration: none;
+  margin-right: 1rem;
+  font-weight: 500;
+}
+
+.nav-link:hover {
+  text-decoration: underline;
+}
+
+.nav-link.logout {
+  color: white;
+}
