@@ -1,28 +1,23 @@
-
-import {useState, useEffect} from 'react';
-import {BrowserRouter, Routes, Route}  from 'react-router-dom';
-import Home from './pages/Home';
-import Dashboard from './pages/Dashboard';
-import Login from './pages/Login';
-import Navbar from './components/Navbar';
-
-import './styles/Navbar.css';
-import { AuthProvider } from './context/AuthContext';
-
-
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { AuthProvider } from "./context/AuthContext";
+import Login from "./pages/Login";
+import Dashboard from "./pages/Dashboard";
+import Navbar from "./components/Navbar";
+import './styles/Navbar.css'
+import PrivateRoute from "./components/PrivateRoute";
 
 function App() {
   return (
-    <BrowserRouter>
-      <Navbar/>
-      <AuthProvider>
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/dashboard" element={<Dashboard />} />
-      </Routes>
-      </AuthProvider>
-    </BrowserRouter>
+    <AuthProvider>
+      <Router>
+        <Navbar />
+        <Routes>
+          <Route path="/" element={<h1>Accueil</h1>} />
+          <Route path="/login" element={<Login />} />
+            <Route path="/dashboard" element={<PrivateRoute><Dashboard /></PrivateRoute>} />
+        </Routes>
+      </Router>
+    </AuthProvider>
   );
 }
 

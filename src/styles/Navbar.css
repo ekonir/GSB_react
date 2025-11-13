@@ -29,3 +29,16 @@
 .nav-link.logout {
   color: white;
 }
+
+.buton
+{background: "none";
+    color: "white";
+    border: "none";
+    border-radius: 6px;
+    padding: 12px;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: "pointer";
+    transition: "background-color 0.3s";
+    margin-top: 8px
+  }
