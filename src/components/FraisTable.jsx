@@ -1,42 +1,79 @@
-// src/components/FraisTable.jsx
-// TODO (question 2) : importer les dépendances nécessaires
 import { useState, useEffect } from "react";
 import React from "react";
-
-import fraisData from "../data/frais.json";
+import axios from "axios";
 import "../styles/FraisTable.css";
+import { useNavigate } from "react-router-dom";
 
-// TODO (question 3): déclarer un composant fonctionnel FraisTable
+// Import du contexte et de l’URL API
+import { useAuth } from "../context/AuthContext";
+import { API_URL } from "../services/authService.js";
+
 function FraisTable() {
+  const navigate = useNavigate();
+  const { user, token } = useAuth();
 
-  // TODO (question 4): Déclarer l'état 'frais' avec useState
   const [fraisList, setFraisList] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
-  const [filterNonNull, setFilterNonNull] = useState(true)
+  const [filterNonNull, setFilterNonNull] = useState(true);
   const [minMontant, setMontant] = useState("");
 
+  const handleDelete = async (id) => {
+    if (!window.confirm("Êtes-vous sûr de vouloir supprimer ce frais ?")) return;
+
+    try {
+      const token = localStorage.getItem("token");
+
+      await axios.delete(`${API_URL}frais/suppr`, {
+        data: { id_frais: id },
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      });
+
+
+
+      // Met à jour la liste en supprimant le frais
+      setFraisList(fraisList.filter((frais) => frais.id_frais !== id));
+    } catch (error) {
+      console.error("Erreur lors de la suppression:", error);
+    }
+  };
 
   useEffect(() => {
-    // simulation d'un appel API avec un delai de 500ms
-    setTimeout(() => {
-      setFraisList(fraisData);//met à jour l'état avec les données du fichier json
-      setLoading(false);//met fin a l'etat de chargement
-    }, 550);// Delai du chargement
-  }, []);//tableau de dépendances vide = éxécute 1 seule fois
+    const fetchFrais = async () => {
+      try {
+        const response = await axios.get(
+          `${API_URL}frais/liste/${user.id_visiteur}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        setFraisList(response.data); // Met à jour l’état avec les données de l’API
+      } catch (error) {
+        console.error("Erreur lors de la récupération des frais:", error);
+      } finally {
+        setLoading(false); // Met fin à l’état de chargement
+      }
+    };
+    fetchFrais();
+  }, [user, token]);
 
-  if (loading) return <div><b>Chargement des frais...</b></div>
+  if (loading) return <div><b>Chargement des frais...</b></div>;
 
-  //Logique de filtrage : filtre les frais en fonction du terme de recherche
+  // Logique de filtrage
   const filteredFrais = fraisList
     .filter((f) =>
-      minMontant === "" || (f.montantvalide !== null && f.montantvalide > parseFloat(minMontant)))
-    .filter((frais) => !filterNonNull || frais.montantvalide !== null) // applique le filtre seulement si la case est cochée
+      minMontant === "" || (f.montantvalide !== null && f.montantvalide > parseFloat(minMontant))
+    )
+    .filter((frais) => !filterNonNull || frais.montantvalide !== null)
     .filter((frais) =>
       frais.anneemois.includes(searchTerm) ||
       frais.id_visiteur.toString().includes(searchTerm)
     );
-
 
   return (
     <div className="frais-table-container">
@@ -54,17 +91,17 @@ function FraisTable() {
         </label>
       </div>
 
-
-      {/*Champ de recherche pour le filtrage*/}
+      {/* Champ de recherche */}
       <div className="search-container">
         <input
           type="text"
           placeholder="Rechercher par année-mois, ID visiteur ou montant..."
           value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}//met a jour le searchTerm
+          onChange={(e) => setSearchTerm(e.target.value)}
         />
       </div>
-      {/* Champ pour filtrer par montant minimum */}
+
+      {/* Filtre par montant minimum */}
       <div className="amount-filter">
         <label>
           Montant minimum validé (€) :
@@ -75,7 +112,8 @@ function FraisTable() {
           />
         </label>
       </div>
-      {/* TODO (question 5): Compléter les en-têtes du tableau */}
+
+      {/* Tableau */}
       <table className="frais-table">
         <thead>
           <tr>
@@ -87,11 +125,11 @@ function FraisTable() {
             <th>Date de modification</th>
             <th>Montant saisi (€)</th>
             <th>Montant validé (€)</th>
+            <th>Actions</th>
+
           </tr>
         </thead>
         <tbody>
-          {/* TODO (question 6): Utiliser la méthode map pour afficher chaque frais */}
-          {/* TODO (question 7): Ajouter l'id du frais comme valeur pour key */}
           {filteredFrais.map((frais) => (
             <tr key={frais.id_frais}>
               <td>{frais.id_frais}</td>
@@ -100,8 +138,23 @@ function FraisTable() {
               <td>{frais.id_visiteur}</td>
               <td>{frais.nbjustificatifs}</td>
               <td>{frais.datemodification}</td>
-              <td></td>
+              <td>{frais.montantsaisi !== null ? frais.montantsaisi : ""}€</td>
               <td>{frais.montantvalide !== null ? frais.montantvalide : ""}€</td>
+              <td>
+                <button onClick={() => navigate(`/frais/modifier/${frais.id_frais}`)}
+                  className="edit-button"
+                >
+                  Modifier
+                </button>
+
+                <button
+                  onClick={() => handleDelete(frais.id_frais)}
+                  className="delete-button"
+                >
+                  Supprimer
+                </button>
+
+              </td>
             </tr>
           ))}
         </tbody>

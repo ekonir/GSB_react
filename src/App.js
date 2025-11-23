@@ -5,6 +5,8 @@ import Dashboard from "./pages/Dashboard";
 import Navbar from "./components/Navbar";
 import './styles/Navbar.css'
 import PrivateRoute from "./components/PrivateRoute";
+import FraisAdd from "./pages/FraisAdd";
+import FraisEdit from "./pages/FraisEdit";
 
 function App() {
   return (
@@ -14,7 +16,9 @@ function App() {
         <Routes>
           <Route path="/" element={<h1>Accueil</h1>} />
           <Route path="/login" element={<Login />} />
-            <Route path="/dashboard" element={<PrivateRoute><Dashboard /></PrivateRoute>} />
+          <Route path="/dashboard" element={<PrivateRoute><Dashboard /></PrivateRoute>} />
+          <Route path="/frais/ajouter" element={<FraisAdd />} />
+          <Route path="/frais/modifier/:id" element={<FraisEdit />} />
         </Routes>
       </Router>
     </AuthProvider>

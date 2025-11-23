@@ -1,38 +1,52 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useState, useEffect } from "react";
+import { signIn, logout, getCurrentUser, getAuthToken } from "../services/authService";
 
 // 1. Création du contexte
 const AuthContext = createContext();
 
-// 2. Fournisseur du contexte (AuthProvider)
+// 2. Fournisseur du contexte
 export function AuthProvider({ children }) {
-  // État local pour stocker l'utilisateur (null = non connecté)
   const [user, setUser] = useState(null);
+  const [token, setToken] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  // 6. Effet de bord pour recharger user/token depuis localStorage
+  useEffect(() => {
+    const user = getCurrentUser();
+    const token = getAuthToken();
+    if (user && token) {
+      setUser(user);
+      setToken(token);
+    }
+    setLoading(false);
+  }, []);
 
   // 3. Fonction de connexion
-  const loginUser = (login, password) => {
-    // Vérification simplifiée : login = 'Andre', password = 'secret'
-    if (login === "Andre" && password === "secret") {
-      setUser({ login }); // mise à jour de l'état avec le login
-      return true;        // connexion réussie
-    } else {
-      return false;       // connexion échouée
-    }
+  const loginUser = async (login, password) => {
+    setLoading(true);
+    const data = await signIn(login, password);
+    setUser(data.visiteur);
+    setToken(data.access_token);
+    setLoading(false);
+    return data;
   };
 
-  // 4. Fonction de déconnexion
+  // 2. Fonction de déconnexion
   const logoutUser = () => {
-    setUser(null); // réinitialiser l'état à null
+    logout();        // supprime du localStorage
+    setUser(null);   // réinitialise l’état user
+    setToken(null);  // réinitialise l’état token
   };
 
-  // 5. Valeurs exposées aux composants enfants
+  // 3. Exposer logoutUser aussi
   return (
-    <AuthContext.Provider value={{ user, loginUser, logoutUser }}>
-      {children} {/* rend les composants enfants (ex: App) */}
+    <AuthContext.Provider value={{ user, token, loading, loginUser, logoutUser }}>
+      {children}
     </AuthContext.Provider>
   );
 }
 
-// 6. Hook personnalisé pour utiliser le contexte facilement
+// 6. Hook personnalisé
 export function useAuth() {
   return useContext(AuthContext);
 }

@@ -12,15 +12,21 @@ function Login() {
   const navigate = useNavigate();
 
   //2. fonction de soumission du formulaire
-  const handleSubmit = (e) => {
-    e.preventDefault();
+const handleSubmit = async (e) => {
+  e.preventDefault();
 
-    if (loginUser(login, password)) {
-      navigate('/dashboard');   // redirection si connexion réussie
-    } else {
-      alert('Identifiants incorrects');
-    }
-  };
+  try {
+    // appel à loginUser (asynchrone)
+    await loginUser(login, password);
+
+    // redirection si succès
+    navigate('/dashboard');
+  } catch (error) {
+    // gestion des erreurs
+    alert('Échec de la connexion : identifiants incorrects ou problème serveur');
+    console.error(error);
+  }
+};
 
   //5. rendu du formulaire
   return (
