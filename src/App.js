@@ -20,6 +20,7 @@ function App() {
           <Route path="/dashboard" element={<PrivateRoute><Dashboard /></PrivateRoute>} />
           <Route path="/frais/ajouter" element={<FraisAdd />} />
           <Route path="/frais/modifier/:id" element={<FraisEdit />} />
+          <Route path="/frais/:id/hors-forfait" element={<FraisHorsForfait />} />
         </Routes>
       </Router>
     </AuthProvider>

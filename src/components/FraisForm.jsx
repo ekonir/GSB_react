@@ -108,6 +108,8 @@ function FraisForm({ frais = null }) {
           </label>
         )}
 
+        <Link className="frais-hors-forfait-link" to={`/frais/${idFrais}/hors-forfait`}>Frais hors forfait</Link>
+
         <button type="submit" disabled={loading}>
           {loading
             ? "Enregistrement..."
