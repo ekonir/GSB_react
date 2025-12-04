@@ -1,6 +1,9 @@
 function Home(){
     return (
-        <h1>Bienvenue</h1>
+        <div>
+        <title>GSB Frais</title>
+        <h2>Bienvenue</h2>
+        </div>
     );
 }
 
