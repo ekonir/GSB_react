@@ -6,7 +6,7 @@ import Navbar from "./components/Navbar";
 import './styles/Navbar.css'
 import PrivateRoute from "./components/PrivateRoute";
 import FraisAdd from "./pages/FraisAdd";
-import FraisEdit from "./pages/FraisEdit";
+import FraisEdit from "./components/FraisEdit";
 import Home from './pages/Home';
 
 function App() {

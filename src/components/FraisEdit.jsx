@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import { API_URL } from "../services/authService";
-import FraisForm from "../components/FraisForm";
+import FraisForm from "./FraisForm";
 
 function FraisEdit() {
   const { id } = useParams();
@@ -22,7 +22,8 @@ function FraisEdit() {
 
         setFrais(response.data);
       } catch (err) {
-        setError(err.response?.data?.message || err.message);
+        console.error('Erreur:', error);
+        //setError(err.response?.data?.message || err.message);
       } finally {
         setLoading(false);
       }
