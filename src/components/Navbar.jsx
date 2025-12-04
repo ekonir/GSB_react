@@ -11,8 +11,9 @@ function Navbar() {
         <div>
           <span><strong>GSB Frais</strong></span>
           <Link to="/" className="nav-link home">Accueil</Link>
-          {user && <Link to="/dashboard" className="nav-link dashboard">Tableau de bord</Link>}        </div>
-        <div>
+          {user && <Link to="/dashboard" className="nav-link dashboard">Tableau de bord</Link>}
+          {user && <Link to="/frais/ajouter" className="nav-link add-frais">Saisir un frais</Link>}
+       
           {user ? (
             
             <button onClick={logoutUser} style={{ color: 'white', background: 'none', border: 'none',cursor: "pointer", textdecoration: "underline" }}> Déconnexion</button>
