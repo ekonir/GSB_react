@@ -8,6 +8,7 @@ import PrivateRoute from "./components/PrivateRoute";
 import FraisAdd from "./pages/FraisAdd";
 import FraisEdit from "./components/FraisEdit";
 import Home from './pages/Home';
+import FraisHorsForfait from "./pages/FraisHorsForfait";
 
 function App() {
   return (

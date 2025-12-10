@@ -31,57 +31,40 @@ test('Login with valid credentials', async ({ page }) => {
   await expect(page).toHaveURL('http://localhost:3000/dashboard');
 });
 
-// cas test 2 //
-test('Login  invalid', async ({ page }) => {
-  await page.goto('http://localhost:3000/login');
+// Cas de test 2
+  test('échec de connexion', async ({ page }) => {
+    await page.goto('http://localhost:3000/login');
+    await page.fill('input[name="login"]', 'PasAndre');
+    await page.fill('input[name="password"]', 'passecret');
+    await page.click('button[type="submit"]');
 
-  // Handle the alert dialog.
-  page.on('dialog', async (dialog) => {
-    expect(dialog.type()).toContain('alert');
-    expect(dialog.message()).toContain('Échec de la connexion');
-    await dialog.accept();
-  });
+ page.on("dialog", async (dialog) => {
+   expect(dialog.type()).toContain("alert");
+   expect(dialog.message()).toContain("Échec de la connexion");
+   await dialog.accept();
+ });
+ });
 
-  // Fill login form with invalid credentials.
-  await page.fill('input[name="login"]', 'pasAndre');
-  await page.fill('input[name="password"]', 'secret');
-  await page.click('button[type="submit"]');
-
-  // Expects user to stay on login page.
-  await expect(page).toHaveURL('http://localhost:3000/login');
-});
-
-
-
-// cas test 3//
-test('page reload', async ({ page }) => {
-
+// Cas de test 3
+test('rafraichissement', async ({ page }) => {
   await page.goto('http://localhost:3000/login');
   await page.fill('input[name="login"]', 'Andre');
   await page.fill('input[name="password"]', 'secret');
   await page.click('button[type="submit"]');
-
-  // Click the get started link.
   await expect(page).toHaveURL('http://localhost:3000/dashboard');
   await page.reload();
-
-  // Expects page to have a heading with the name of Installation.
   await expect(page).toHaveURL('http://localhost:3000/dashboard');
 });
 
-
-// cas test 4//
-test('Logout user', async ({ page }) => {
-
+// Cas de test 4
+ test('Deconnexion', async ({ page }) => {
   await page.goto('http://localhost:3000/login');
   await page.fill('input[name="login"]', 'Andre');
   await page.fill('input[name="password"]', 'secret');
   await page.click('button[type="submit"]');
-  await expect(page).toHaveURL('http://localhost:3000/Dashboard');
+  await expect(page).toHaveURL('http://localhost:3000/dashboard');
 
-  // Click the get started link.
-  await page.click('button[name="logout"]'); 
+  await page.click('button#deco');
 
-  // Expects page to have a heading with the name of Installation.
   await expect(page).toHaveURL('http://localhost:3000/login');
 });

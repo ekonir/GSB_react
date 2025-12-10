@@ -16,7 +16,7 @@ function Navbar() {
        
           {user ? (
             
-            <button onClick={logoutUser} style={{ color: 'white', background: 'none', border: 'none',cursor: "pointer", textdecoration: "underline" }}> Déconnexion</button>
+            <button id="deco" onClick={logoutUser} style={{ color: 'white', background: 'none', border: 'none',cursor: "pointer", textdecoration: "underline" }}> Déconnexion</button>
 
           ) : (
             <Link to="/login" className="nav-link login">Connexion</Link>

@@ -4,7 +4,7 @@ import { useParams } from "react-router-dom";
 
 // Import API
 import { API_URL } from "../services/authService.js";
-import FraisHorsForfaitTable from "../components/FraisHorsForfaitTable.jsx";
+// import FraisHorsForfaitTable from "../components/FraisHorsForfaitTable.jsx";
 
 function FraisHorsForfait() {
   const { id } = useParams();   // Récupère l’ID du frais dans l’URL
@@ -12,9 +12,7 @@ function FraisHorsForfait() {
   const [fraisHorsForfaitList, setFraisHorsForfaitList] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // ────────────────────────────────────────────────
-  // Récupérer les frais hors forfait pour l'id donné
-  // ────────────────────────────────────────────────
+
   useEffect(() => {
     const fetchFraisHorsForfaitList = async () => {
       try {
@@ -39,11 +37,11 @@ function FraisHorsForfait() {
     <div>
       <h2>Frais hors forfait du frais n° {id}</h2>
 
-      {/* Passage des props au composant enfant */}
+      {/* Passage des props au composant enfant 
       <FraisHorsForfaitTable
         idFrais={id}
         fraisHFList={fraisHorsForfaitList}
-      />
+      />*/}
     </div>
   );
 }
