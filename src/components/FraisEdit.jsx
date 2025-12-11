@@ -22,8 +22,7 @@ function FraisEdit() {
 
         setFrais(response.data);
       } catch (err) {
-        console.error('Erreur:', error);
-        //setError(err.response?.data?.message || err.message);
+        setError(err.response?.data?.message || err.message);
       } finally {
         setLoading(false);
       }

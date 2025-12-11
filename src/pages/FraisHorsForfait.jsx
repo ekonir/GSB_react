@@ -1,28 +1,36 @@
 import React, { useState, useEffect } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
-import { useParams } from "react-router-dom";
-
-// Import API
-import { API_URL } from "../services/authService.js";
-// import FraisHorsForfaitTable from "../components/FraisHorsForfaitTable.jsx";
+import { API_URL } from "../services/authService";
+import FraisHorsForfaitTable from "../components/FraisHorsForfaitTable";
+import "../styles/FraisHorsForfait.css";
 
 function FraisHorsForfait() {
-  const { id } = useParams();   // Récupère l’ID du frais dans l’URL
-
-  const [fraisHorsForfaitList, setFraisHorsForfaitList] = useState([]);
+  const { id } = useParams();
+  const navigate = useNavigate();
+  
+  const [fraisHFList, setFraisHFList] = useState([]);
   const [loading, setLoading] = useState(true);
-
+  const [error, setError] = useState("");
+  const [total, setTotal] = useState(0);
 
   useEffect(() => {
     const fetchFraisHorsForfaitList = async () => {
       try {
-        const response = await axios.get(
-          `http://gsb.julliand.etu.lmdsio.com/api/fraisHF/liste/${id}`
-        );
+        const token = localStorage.getItem("token");
+        const response = await axios.get(`${API_URL}fraisHF/liste/${id}`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        setFraisHFList(response.data);
 
-        setFraisHorsForfaitList(response.data);
-      } catch (error) {
-        console.error("Erreur lors de la récupération des frais HF :", error);
+       // calcul du total des frais hors forfait 
+       let somme = 0; response.data.forEach((fraisHorsForfait) => {
+        somme += parseFloat(fraisHorsForfait.montant_fraishorsforfait);
+      });
+      setTotal(somme);
+
+      } catch {
+        setError("Erreur lors du chargement");
       } finally {
         setLoading(false);
       }
@@ -31,17 +39,51 @@ function FraisHorsForfait() {
     fetchFraisHorsForfaitList();
   }, [id]);
 
-  if (loading) return <b>Chargement des frais hors forfait...</b>;
+  const handleDelete = async (idHF) => {
+    try {
+      const token = localStorage.getItem("token");
+      await axios.delete(`${API_URL}fraisHF/suppr`, {
+        headers: { Authorization: `Bearer ${token}` },
+        data: { id_fraisHF: idHF },
+      });
+      const response = await axios.get(`${API_URL}fraisHF/liste/${id}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      // fetchFraisHorsForfaitList();
+      setFraisHFList(response.data);
+    } catch {
+      setError("Suppression impossible");
+    }
+  };
+
+  if (loading) return <p>Chargement...</p>;
+  if (error) return <div className="error-message">{error}</div>;
 
   return (
-    <div>
-      <h2>Frais hors forfait du frais n° {id}</h2>
+    <div className="frais-hors-forfait-container">
 
-      {/* Passage des props au composant enfant 
       <FraisHorsForfaitTable
         idFrais={id}
-        fraisHFList={fraisHorsForfaitList}
-      />*/}
+        fraisHFList={fraisHFList}
+        handleDelete={handleDelete}
+      />
+      <div className="total">Total : {total.toFixed(2)} €</div>
+<button
+        type="button"
+        className="add-button"
+        onClick={() => navigate(`/frais/${id}/hors-forfait/ajouter`)}
+      >
+        Ajouter
+      </button>
+      <button
+        type="button"
+        className="return-button"
+        onClick={() => navigate(`/frais/modifier/${id}`)}
+      >
+        Retour
+      </button>
+      
+
     </div>
   );
 }

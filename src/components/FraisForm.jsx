@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
@@ -14,7 +15,6 @@ function FraisForm({ frais = null }) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  // Pré-remplir le formulaire si on modifie un frais existant
   useEffect(() => {
     if (frais) {
       setIdFrais(frais.id_frais);
@@ -39,22 +39,18 @@ function FraisForm({ frais = null }) {
       };
 
       if (frais) {
-        // Mise à jour d'un frais existant (UPDATE)
         fraisData["id_frais"] = idFrais;
         fraisData["montantvalide"] = parseFloat(montant);
 
-        const response = await axios.post(`${API_URL}frais/modif`, fraisData, {
+        await axios.post(`${API_URL}frais/modif`, fraisData, {
           headers: { Authorization: `Bearer ${token}` },
         });
-        console.log(response);
       } else {
-        // Ajout d'un nouveau frais (CREATE)
         fraisData["id_visiteur"] = getCurrentUser()["id_visiteur"];
 
-        const response = await axios.post(`${API_URL}frais/ajout`, fraisData, {
+        await axios.post(`${API_URL}frais/ajout`, fraisData, {
           headers: { Authorization: `Bearer ${token}` },
         });
-        console.log(response);
       }
 
       navigate("/dashboard");
@@ -75,29 +71,29 @@ function FraisForm({ frais = null }) {
       {error && <div className="error-message">{error}</div>}
 
       <form onSubmit={handleSubmit} className="frais-form">
-        <label>
-          Année-Mois :
+        <div className="form-group">
+          <label>Année-Mois :</label>
           <input
             type="text"
             value={anneeMois}
             onChange={(e) => setAnneeMois(e.target.value)}
             required
           />
-        </label>
+        </div>
 
-        <label>
-          Nombre de justificatifs :
+        <div className="form-group">
+          <label>Nombre de justificatifs :</label>
           <input
             type="number"
             value={nbJustificatifs}
             onChange={(e) => setNbJustificatifs(e.target.value)}
             required
           />
-        </label>
+        </div>
 
         {frais && (
-          <label>
-            Montant validé (€) :
+          <div className="form-group">
+            <label>Montant validé (€) :</label>
             <input
               type="number"
               step="0.01"
@@ -105,10 +101,18 @@ function FraisForm({ frais = null }) {
               onChange={(e) => setMontant(e.target.value)}
               required
             />
-          </label>
+          </div>
         )}
 
-        <Link className="frais-hors-forfait-link" to={`/frais/${idFrais}/hors-forfait`}>Frais hors forfait</Link>
+        {frais && (
+          <div className="form-group">
+            <Link 
+            className="frais-hors-forfait-link" 
+            to={`/frais/${idFrais}/hors-forfait`}>
+              Frais hors forfait
+              </Link>
+          </div>
+        )}
 
         <button type="submit" disabled={loading}>
           {loading

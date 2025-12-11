@@ -1,16 +1,17 @@
 import React from "react";
 import { useAuth } from "../context/AuthContext";
 import FraisTable from "../components/FraisTable.jsx"; 
+import '../styles/Navbar.css'
+ 
 function Dashboard() {
   const { user } = useAuth();
 
   return (
     <div>
       <h1>Tableau de bord</h1>
-        <p>Bienvenue <b><u>{user.login}</u></b></p>
+            <p>Bienvenue <b>{user.login}</b> !</p>
       {user ? (
         // src/components/Dashboard.jsx
-
       // Affichage du composant FraisTable
       <FraisTable />
 
