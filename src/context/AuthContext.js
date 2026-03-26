@@ -10,7 +10,7 @@ export function AuthProvider({ children }) {
   const [token, setToken] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  // 6. Effet de bord pour recharger user/token depuis localStorage
+  // 3. Effet de bord pour recharger user/token depuis localStorage
   useEffect(() => {
     const user = getCurrentUser();
     const token = getAuthToken();
@@ -21,24 +21,24 @@ export function AuthProvider({ children }) {
     setLoading(false);
   }, []);
 
-  // 3. Fonction de connexion
+  // 4. Fonction de connexion
   const loginUser = async (login, password) => {
     setLoading(true);
     const data = await signIn(login, password);
     setUser(data.visiteur);
-    setToken(data.access_token);
+    setToken(data.token);
     setLoading(false);
     return data;
   };
 
-  // 2. Fonction de déconnexion
+  // 5. Fonction de déconnexion
   const logoutUser = () => {
     logout();        // supprime du localStorage
     setUser(null);   // réinitialise l’état user
     setToken(null);  // réinitialise l’état token
   };
 
-  // 3. Exposer logoutUser aussi
+  // 6. Exposer logoutUser aussi
   return (
     <AuthContext.Provider value={{ user, token, loading, loginUser, logoutUser }}>
       {children}
@@ -46,7 +46,7 @@ export function AuthProvider({ children }) {
   );
 }
 
-// 6. Hook personnalisé
+// 7. Hook personnalisé
 export function useAuth() {
   return useContext(AuthContext);
 }

@@ -13,6 +13,8 @@ function Navbar() {
           <Link to="/" className="nav-link home">Accueil</Link>
           {user && <Link to="/dashboard" className="nav-link dashboard">Tableau de bord</Link>}
           {user && <Link to="/frais/ajouter" className="nav-link add-frais">Saisir un frais</Link>}
+          {user && <Link to="/gestion" className="nav-link Gestion">Gestion Visiteur</Link>}
+
        
           {user ? (
             

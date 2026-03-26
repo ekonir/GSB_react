@@ -5,40 +5,19 @@ import "../styles/FraisTable.css";
 import { useNavigate } from "react-router-dom";
 
 // Import du contexte et de l’URL API
-import { useAuth } from "../context/AuthContext";
+import { useAuth } from "../context/AuthContext.js";
 import { API_URL } from "../services/authService.js";
 
-function FraisTable() {
+function VisiteurTable() {
   const navigate = useNavigate();
   const { user, token } = useAuth();
 
-  const [fraisList, setFraisList] = useState([]);
+  const [visitList, setvisitList] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
   const [filterNonNull, setFilterNonNull] = useState(true);
   const [minMontant, setMontant] = useState("");
 
-  const handleDelete = async (id) => {
-    if (!window.confirm("Êtes-vous sûr de vouloir supprimer ce frais ?")) return;
-
-    try {
-      const token = localStorage.getItem("token");
-
-      await axios.delete(`${API_URL}frais/suppr`, {
-        data: { id_frais: id },
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-      });
-
-
-      // Met à jour la liste en supprimant le frais
-      setFraisList(fraisList.filter((frais) => frais.id_frais !== id));
-    } catch (error) {
-      console.error("Erreur lors de la suppression:", error);
-    }
-  };
 
   useEffect(() => {
     const fetchFrais = async () => {
@@ -51,20 +30,20 @@ function FraisTable() {
             },
           }
         );
-        setFraisList(response.data); // Met à jour l’état avec les données de l’API
+        setvisitList(response.data); // Met à jour l’état avec les données de l’API
       } catch (error) {
         console.error("Erreur lors de la récupération des frais:", error);
       } finally {
         setLoading(false); // Met fin à l’état de chargement
       }
     };
-    fetchFrais();
+    fetchVisit();
   }, [user, token]);
 
   if (loading) return <div><b>Chargement des frais...</b></div>;
 
   // Logique de filtrage
-  const filteredFrais = fraisList
+  const filterVisit = fraisList
     .filter((f) =>
       minMontant === "" || (f.montantvalide !== null && f.montantvalide > parseFloat(minMontant))
     )
@@ -100,17 +79,7 @@ function FraisTable() {
         />
       </div>
 
-      {/* Filtre par montant minimum */}
-      <div className="amount-filter">
-        <label>
-          Montant minimum validé (€) :
-          <input
-            type="number"
-            value={minMontant}
-            onChange={(e) => setMontant(e.target.value)}
-          />
-        </label>
-      </div>
+      
 
       {/* Tableau */}
       <table className="frais-table">
@@ -162,4 +131,4 @@ function FraisTable() {
   );
 }
 
-export default FraisTable;
+export default VisiteurTable;
