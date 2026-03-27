@@ -20,10 +20,10 @@ function VisiteurTable() {
 
 
   useEffect(() => {
-    const fetchFrais = async () => {
+    const fetchVisit = async () => {
       try {
         const response = await axios.get(
-          `${API_URL}frais/liste/${user.id_visiteur}`,
+          `${API_URL}listerVisit`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -40,87 +40,55 @@ function VisiteurTable() {
     fetchVisit();
   }, [user, token]);
 
-  if (loading) return <div><b>Chargement des frais...</b></div>;
+  if (loading) return <div><b>Chargement de la liste des visiteurs...</b></div>;
 
   // Logique de filtrage
-  const filterVisit = fraisList
-    .filter((f) =>
-      minMontant === "" || (f.montantvalide !== null && f.montantvalide > parseFloat(minMontant))
-    )
-    .filter((frais) => !filterNonNull || frais.montantvalide !== null)
-    .filter((frais) =>
-      frais.anneemois.includes(searchTerm) ||
-      frais.id_visiteur.toString().includes(searchTerm)
-    );
+  const filterVisit = visitList;
+   // .filter((visiteur) => !filterNonNull || frais.montantvalide !== null)
+   // .filter((visiteur) => frais.anneemois.includes(searchTerm) frais.id_visiteur.toString().includes(searchTerm)
+  //  );
 
   return (
     <div className="frais-table-container">
-      <h2>Liste des Frais</h2>
+      <h2>Liste des visiteur</h2>
 
-      {/* Case à cocher */}
-      <div className="filter-container">
-        <label>
-          <input
-            type="checkbox"
-            checked={filterNonNull}
-            onChange={(e) => setFilterNonNull(e.target.checked)}
-          />
-          Afficher seulement les frais avec un montant validé
-        </label>
-      </div>
 
       {/* Champ de recherche */}
       <div className="search-container">
         <input
           type="text"
-          placeholder="Rechercher par année-mois, ID visiteur ou montant..."
+          placeholder="Rechercher par nom de visiteur ou de laboratoirs..."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
         />
-      </div>
-
-      
+      </div>      
 
       {/* Tableau */}
       <table className="frais-table">
         <thead>
           <tr>
-            <th>ID</th>
-            <th>ID État</th>
-            <th>Année-Mois</th>
-            <th>ID Visiteur</th>
-            <th>Nombre de justificatifs</th>
-            <th>Date de modification</th>
-            <th>Montant saisi (€)</th>
-            <th>Montant validé (€)</th>
-            <th>Actions</th>
+            <th>Nom</th>
+            <th>Prenom</th>
+            <th>Laboratoire</th>
+            <th>Activités complémentaires</th>
 
           </tr>
         </thead>
         <tbody>
-          {filteredFrais.map((frais) => (
-            <tr key={frais.id_frais}>
-              <td>{frais.id_frais}</td>
-              <td>{frais.id_etat}</td>
-              <td>{frais.anneemois}</td>
-              <td>{frais.id_visiteur}</td>
-              <td>{frais.nbjustificatifs}</td>
-              <td>{frais.datemodification}</td>
-              <td>{frais.montantsaisi !== null ? frais.montantsaisi : ""}€</td>
-              <td>{frais.montantvalide !== null ? frais.montantvalide : ""}€</td>
+          {filterVisit.map((visit) => (
+            <tr key={visit.id_visiteur}>
+              <td>{visit.nom_visiteur}</td>
+              <td>{visit.prenom_visiteur}</td>
+              <td>{visit.nom_laboratoire}</td>
+              <td>activité complemetntaire</td>
               <td>
-                <button onClick={() => navigate(`/frais/modifier/${frais.id_frais}`)}
+                
+                   {/* Tableau <button onClick={() => navigate(`/frais/modifier/${frais.id_frais}`)}
                   className="edit-button"
                 >
                   Modifier
-                </button>
+                </button>*/}
 
-                <button
-                  onClick={() => handleDelete(frais.id_frais)}
-                  className="delete-button"
-                >
-                  Supprimer
-                </button>
 
               </td>
             </tr>
