@@ -8,11 +8,11 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext.js";
 import { API_URL } from "../services/authService.js";
 
-function VisiteurTable() {
+function ActComTable() {
   const navigate = useNavigate();
   const { user, token } = useAuth();
 
-  const [visitList, setvisitList] = useState([]);
+  const [actComList, setacttList] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
 
@@ -28,9 +28,9 @@ function VisiteurTable() {
             },
           }
         );
-        setvisitList(response.data); // Met à jour l’état avec les données de l’API
+        setacttList(response.data); // Met à jour l’état avec les données de l’API
       } catch (error) {
-        console.error("Erreur lors de la récupération de la liste des visiteurs:", error);
+        console.error("Erreur lors de la récupération des visiteur:", error);
       } finally {
         setLoading(false); // Met fin à l’état de chargement
       }
@@ -41,24 +41,14 @@ function VisiteurTable() {
   if (loading) return <div><b>Chargement de la liste des visiteurs...</b></div>;
 
   // Logique de filtrage
-  const filterVisit = visitList
+  const filteractCom = actComList
    .filter((visiteur) => visiteur.nom_visiteur.toUpperCase().includes(searchTerm.toUpperCase()) || visiteur.nom_laboratoire.toUpperCase().includes(searchTerm.toUpperCase())
     );
 
   return (
     <div className="frais-table-container">
-      <h2>Liste des visiteur</h2>
-
-
-      {/* Champ de recherche */}
-      <div className="search-container">
-        <input
-          type="text"
-          placeholder="Rechercher par nom de visiteur ou de laboratoirs..."
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-        />
-      </div>      
+      <h2>Listes activité complementaire de l'utilisateur </h2>
+    
 
       {/* Tableau */}
       <table className="frais-table">
@@ -72,13 +62,20 @@ function VisiteurTable() {
           </tr>
         </thead>
         <tbody>
-          {filterVisit.map((visit) => (
-            <tr key={visit.id_visiteur}>
-              <td>{visit.nom_visiteur}</td>
-              <td>{visit.prenom_visiteur}</td>
-              <td>{visit.nom_laboratoire}</td>
-              <td>{<button onClick={() => navigate(`/gestion/${visit.id_visiteur}/activites-complementaire`)} className="edit-button"> activité complementaire </button>}
-/gestion/:id/activites-complementaire
+          {filteractCom.map((actCom) => (
+            <tr key={actCom.id_visiteur}>
+              <td>{actCom.nom_visiteur}</td>
+              <td>{actCom.prenom_visiteur}</td>
+              <td>{actCom.nom_laboratoire}</td>
+              <td>activité complemetntaire</td>
+              <td>
+                
+                   {/* Tableau <button onClick={() => navigate(`/frais/modifier/${frais.id_frais}`)}
+                  className="edit-button"
+                >
+                  Modifier
+                </button>*/}
+
 
               </td>
             </tr>
@@ -89,4 +86,4 @@ function VisiteurTable() {
   );
 }
 
-export default VisiteurTable;
+export default ActComTable;
