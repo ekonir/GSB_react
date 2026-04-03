@@ -3,6 +3,8 @@ import React from "react";
 import axios from "axios";
 import "../styles/FraisTable.css";
 import { useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
+
 
 // Import du contexte et de l’URL API
 import { useAuth } from "../context/AuthContext.js";
@@ -15,6 +17,9 @@ function VisiteurTable() {
   const [visitList, setvisitList] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
+
+
+  
 
 
   useEffect(() => {
@@ -77,8 +82,7 @@ function VisiteurTable() {
               <td>{visit.nom_visiteur}</td>
               <td>{visit.prenom_visiteur}</td>
               <td>{visit.nom_laboratoire}</td>
-              <td>{<button onClick={() => navigate(`/gestion/${visit.id_visiteur}/activites-complementaire`)} className="edit-button"> activité complementaire </button>}
-/gestion/:id/activites-complementaire
+              <td>{<button onClick={() => navigate(`/gestion/${visit.id_visiteur}`)} className="edit-button"> activité complementaire </button>}
 
               </td>
             </tr>

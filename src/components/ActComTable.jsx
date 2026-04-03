@@ -3,6 +3,8 @@ import React from "react";
 import axios from "axios";
 import "../styles/FraisTable.css";
 import { useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
+
 
 // Import du contexte et de l’URL API
 import { useAuth } from "../context/AuthContext.js";
@@ -16,12 +18,14 @@ function ActComTable() {
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
 
+     const { id } = useParams();
+
 
   useEffect(() => {
     const fetchVisit = async () => {
       try {
         const response = await axios.get(
-          `${API_URL}listerVisit`,
+          `${API_URL}listerActVi/${id}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -42,13 +46,13 @@ function ActComTable() {
 
   // Logique de filtrage
   const filteractCom = actComList
-   .filter((visiteur) => visiteur.nom_visiteur.toUpperCase().includes(searchTerm.toUpperCase()) || visiteur.nom_laboratoire.toUpperCase().includes(searchTerm.toUpperCase())
+    .filter((visiteur) => visiteur.nom_visiteur.toUpperCase().includes(searchTerm.toUpperCase()) || visiteur.nom_laboratoire.toUpperCase().includes(searchTerm.toUpperCase())
     );
 
   return (
     <div className="frais-table-container">
       <h2>Listes activité complementaire de l'utilisateur </h2>
-    
+
 
       {/* Tableau */}
       <table className="frais-table">
@@ -57,7 +61,9 @@ function ActComTable() {
             <th>Nom</th>
             <th>Prenom</th>
             <th>Laboratoire</th>
-            <th>Activités complémentaires</th>
+            <th>Activité complémentaire</th>
+            <th>Dates</th>
+            <th>Actions</th>
 
           </tr>
         </thead>
@@ -67,17 +73,10 @@ function ActComTable() {
               <td>{actCom.nom_visiteur}</td>
               <td>{actCom.prenom_visiteur}</td>
               <td>{actCom.nom_laboratoire}</td>
-              <td>activité complemetntaire</td>
-              <td>
-                
-                   {/* Tableau <button onClick={() => navigate(`/frais/modifier/${frais.id_frais}`)}
-                  className="edit-button"
-                >
-                  Modifier
-                </button>*/}
+              <td>{actCom.motif_activite}</td>
+              <td>{actCom.date_activite}</td>
+              <td>//</td>
 
-
-              </td>
             </tr>
           ))}
         </tbody>
