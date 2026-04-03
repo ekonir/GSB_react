@@ -13,6 +13,7 @@ import FraisHorsForfaitAdd from "./pages/FraisHorsForfaitAdd";
 import FraisHorsForfaitEdit from "./pages/FraisHorsForfaitEdit";
 import GestionVisiteur from "./pages/GestionVisiteur";
 import GestionActCo from "./pages/GestionActCo";
+import Top10 from "./pages/Top10";
 
 function App() {
   return (
@@ -30,6 +31,7 @@ function App() {
           <Route path="/frais/:id/hors-forfait/modifier/:idHF" element={<FraisHorsForfaitEdit />} />
           <Route path="/gestion" element={<PrivateRoute><GestionVisiteur /></PrivateRoute>} />
           <Route path="/gestion/:id" element={<PrivateRoute><GestionActCo/></PrivateRoute>} />
+          <Route path="/top10" element={<PrivateRoute><top10/></PrivateRoute>} />
         </Routes>
       </Router>
     </AuthProvider>
