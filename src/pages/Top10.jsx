@@ -8,7 +8,6 @@ function Top10() {
 
   return (
     <div>
-      <h1>Les 10 visiteurs ayant invité le plus de praticiens à des activités complémentaires</h1>
 
       {user ? (
         // src/components/GestionVisiteur.jsx

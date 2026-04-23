@@ -51,21 +51,19 @@ function ActComTable() {
 
   return (
     <div className="frais-table-container">
-      <h2>Listes activité complementaire de l'utilisateur </h2>
+      <h3>Les 10 visiteurs ayant invité le plus de praticiens à des activités complémentaires</h3>
 
 
       {/* Tableau */}
       <table className="frais-table">
         <thead>
           <tr>
+            <th>#</th>
             <th>Nom</th>
-            <th>Prenom</th>
+            <th>Prénom</th>
             <th>Laboratoire</th>
-            <th>Activité complémentaire</th>
-            <th>Dates</th>
-            <th>Actions</th>
-
-          </tr>
+            <th>Nombre d'activités</th>
+        </tr>
         </thead>
         <tbody>
           {filteractCom.map((actCom) => (
@@ -73,10 +71,7 @@ function ActComTable() {
               <td>{actCom.nom_visiteur}</td>
               <td>{actCom.prenom_visiteur}</td>
               <td>{actCom.nom_laboratoire}</td>
-              <td>{actCom.motif_activite}</td>
-              <td>{actCom.date_activite}</td>
-              <td>//</td>
-
+              <td>{actCom.total_activites}</td>
             </tr>
           ))}
         </tbody>
