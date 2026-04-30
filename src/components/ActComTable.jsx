@@ -18,7 +18,28 @@ function ActComTable() {
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
 
-     const { id } = useParams();
+  const { id } = useParams();
+
+  const handleDelete = async (id) => {
+    if (!window.confirm("Êtes-vous sûr de vouloir supprimer cette activité complementaire ?")) return;
+
+    try {
+      const token = localStorage.getItem("token");
+
+      await axios.delete(`${API_URL}listerActVi/suppr`, {
+        data: { id_visiteur: id },
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      });
+
+      // Met à jour la liste en supprimant le frais
+      setacttList(actComList.filter((actCom) => actCom.id_visiteur !== id));
+    } catch (error) {
+      console.error("Erreur lors de la suppression:", error);
+    }
+  };
 
 
   useEffect(() => {
@@ -45,8 +66,7 @@ function ActComTable() {
   if (loading) return <div><b>Chargement de la liste des visiteurs...</b></div>;
 
   // Logique de filtrage
-  const filteractCom = actComList
-    .filter((visiteur) => visiteur.nom_visiteur.toUpperCase().includes(searchTerm.toUpperCase()) || visiteur.nom_laboratoire.toUpperCase().includes(searchTerm.toUpperCase())
+  const filteractCom = actComList.filter((visiteur) => visiteur.nom_visiteur.toUpperCase().includes(searchTerm.toUpperCase()) || visiteur.nom_laboratoire.toUpperCase().includes(searchTerm.toUpperCase())
     );
 
   return (
@@ -75,7 +95,19 @@ function ActComTable() {
               <td>{actCom.nom_laboratoire}</td>
               <td>{actCom.motif_activite}</td>
               <td>{actCom.date_activite}</td>
-              <td>//</td>
+              <td>
+                <button onClick={() => navigate(`/Act/modifier/${actCom.id_visiteur}`)}
+                  className="edit-button"
+                >
+                  Modifier
+                </button>
+
+                <button
+                  onClick={() => handleDelete(actCom.id_visiteur)}
+                  className="delete-button"
+                >
+                  Supprimer
+                </button></td>
 
             </tr>
           ))}
