@@ -29,6 +29,7 @@ function App() {
           <Route path="/frais/:id/hors-forfait" element={<FraisHorsForfait />} />
           <Route path="/frais/:id/hors-forfait/ajouter" element={<FraisHorsForfaitAdd />} />
           <Route path="/frais/:id/hors-forfait/modifier/:idHF" element={<FraisHorsForfaitEdit />} />
+          
           <Route path="/gestion" element={<PrivateRoute><GestionVisiteur /></PrivateRoute>} />
           <Route path="/gestion/:id" element={<PrivateRoute><GestionActCo/></PrivateRoute>} />
           <Route path="/top10" element={<PrivateRoute><Top10/></PrivateRoute>} />

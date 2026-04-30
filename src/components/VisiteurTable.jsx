@@ -65,7 +65,7 @@ function VisiteurTable() {
         />
       </div> 
       <div className="top10">
-          {<button onClick={() => navigate(`/Top10`)} className="edit-button"> Top 10 </button>}
+          {<button onClick={() => navigate(`/Top10`)} className="nav-button"> Top 10 </button>}
       </div>
 
       {/* Tableau */}
@@ -85,7 +85,7 @@ function VisiteurTable() {
               <td>{visit.nom_visiteur}</td>
               <td>{visit.prenom_visiteur}</td>
               <td>{visit.nom_laboratoire}</td>
-              <td>{<button onClick={() => navigate(`/gestion/${visit.id_visiteur}`)} className="edit-button"> Voir Activité complementaire </button>}
+              <td>{<button onClick={() => navigate(`/gestion/${visit.id_visiteur}`)} className="nav-button"> Voir Activité complementaire </button>}
 
               </td>
             </tr>

@@ -69,3 +69,11 @@ button:disabled {
   background-color: #c82333; 
 }
 
+.nav-button {
+  background-color: #48bb65;
+  margin-right: 5px;
+}
+
+.nav-button:hover {
+  background-color: #2e723f;
+}

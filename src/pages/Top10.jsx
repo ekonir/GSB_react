@@ -1,6 +1,6 @@
 import React from "react";
 import { useAuth } from "../context/AuthContext.js";
-import ActComTable from "../components/ActComTable.jsx";
+import Top from "../components/Top.jsx";
 import '../styles/Navbar.css'
  
 function Top10() {
@@ -10,9 +10,8 @@ function Top10() {
     <div>
 
       {user ? (
-        // src/components/GestionVisiteur.jsx
       // Affichage du composant VisiteurTable
-      <ActComTable />
+      <Top />
 
       ) : (
         <p>Vous devez être connecté pour accéder a cette page.</p>

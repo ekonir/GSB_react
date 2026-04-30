@@ -10,29 +10,28 @@ import { useParams } from "react-router-dom";
 import { useAuth } from "../context/AuthContext.js";
 import { API_URL } from "../services/authService.js";
 
-function ActComTable() {
+function Top() {
   const navigate = useNavigate();
   const { user, token } = useAuth();
 
-  const [actComList, setacttList] = useState([]);
+  const [Top10List, settoptList] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [searchTerm, setSearchTerm] = useState("");
 
-     const { id } = useParams();
+  const { id } = useParams();
 
 
   useEffect(() => {
     const fetchVisit = async () => {
       try {
         const response = await axios.get(
-          `${API_URL}listerActVi/${id}`,
+          `${API_URL}top10Visiteurs`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
             },
           }
         );
-        setacttList(response.data); // Met à jour l’état avec les données de l’API
+        settoptList(response.data); // Met à jour l’état avec les données de l’API
       } catch (error) {
         console.error("Erreur lors de la récupération des visiteur:", error);
       } finally {
@@ -45,38 +44,34 @@ function ActComTable() {
   if (loading) return <div><b>Chargement de la liste des visiteurs...</b></div>;
 
   // Logique de filtrage
-  const filteractCom = actComList
-    .filter((visiteur) => visiteur.nom_visiteur.toUpperCase().includes(searchTerm.toUpperCase()) || visiteur.nom_laboratoire.toUpperCase().includes(searchTerm.toUpperCase())
-    );
+  const filterTop = Top10List;
+
 
   return (
     <div className="frais-table-container">
-      <h2>Listes activité complementaire de l'utilisateur </h2>
+      <h3>Les 10 visiteurs ayant invité le plus de praticiens à des activités complémentaires</h3>
 
 
       {/* Tableau */}
       <table className="frais-table">
         <thead>
           <tr>
+            <th>#</th>
             <th>Nom</th>
-            <th>Prenom</th>
+            <th>Prénom</th>
             <th>Laboratoire</th>
-            <th>Activité complémentaire</th>
-            <th>Dates</th>
-            <th>Actions</th>
-
+            <th>Nombre d'activités</th>
           </tr>
         </thead>
         <tbody>
-          {filteractCom.map((actCom) => (
-            <tr key={actCom.id_visiteur}>
-              <td>{actCom.nom_visiteur}</td>
-              <td>{actCom.prenom_visiteur}</td>
-              <td>{actCom.nom_laboratoire}</td>
-              <td>{actCom.motif_activite}</td>
-              <td>{actCom.date_activite}</td>
-              <td>//</td>
+          {filterTop.map((t, index) => (
 
+            <tr key={t.id_visiteur}>
+              <td> {index + 1}</td>
+              <td>{t.nom_visiteur}</td>
+              <td>{t.prenom_visiteur}</td>
+              <td>{t.nom_laboratoire}</td>
+              <td>{t.total_activites}</td>
             </tr>
           ))}
         </tbody>
@@ -85,4 +80,4 @@ function ActComTable() {
   );
 }
 
-export default ActComTable;
+export default Top;
